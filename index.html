@@ -11,9 +11,26 @@
     <link rel="apple-touch-icon" href="./calendar.png" />
     <title>Important Dates</title>
     <style>
+      :root {
+        --text-color: #e0e0e0;
+        --page-background-color: #1e1e1e;
+        --header-color: #66b2ff;
+        --add-date-button-color: #0056b3;
+        --add-date-button-color__hover: #004494;
+        --date-container-background-color: #2c2c2c;
+        --task-background-color: #3a3a3a;
+        --delete-button-background-color: #ff4d4d;
+        --delete-button-background-color__hover: #e60000;
+        --input-background-color: #333;
+        --input-border-color: #555;
+        --button-color: #e0e0e0;
+        --modal-content-background-color: #e0e0e0;
+      }
+
       body {
         font-family: Arial, sans-serif;
-        background-color: #f4f4f9;
+        background-color: var(--page-background-color); /* Dark background */
+        color: var(--text-color); /* Light text color */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -23,176 +40,222 @@
         padding: 20px;
         box-sizing: border-box;
       }
+
       .container {
         text-align: center;
         width: 100%;
         max-width: 800px;
       }
+
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .header-container h1 {
+        margin-right: 36px;
+        font-size: 1.8em;
+        text-align: center;
+        color: var(--header-color); /* Light blue color */
+        padding: 0 10px;
+      }
+
+      .header-container ion-icon {
+        padding: 10px;
+        font-size: 25px;
+        color: var(--text-color);
+      }
+
       .date-container {
-        background-color: #fff;
+        background-color: var(
+          --date-container-background-color
+        ); /* Darker background for date container */
         padding: 20px;
         border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Softer shadow */
         margin-bottom: 20px;
       }
+
       .date-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: #e9ecef;
+        background-color: var(
+          --task-background-color
+        ); /* Darker background for date items */
         margin-bottom: 10px;
         padding: 15px;
         border-radius: 5px;
-        position: relative; /* Needed for positioning */
-        overflow: hidden; /* Hide overflow for animation effect */
+        position: relative;
+        overflow: hidden;
       }
+
       .course-title {
         font-weight: bold;
-        color: #007bff;
+        color: var(--header-color); /* Light blue color */
         flex-basis: 30%;
         text-align: left;
       }
+
       .assignment {
         font-weight: normal;
-        color: #555;
         flex-basis: 70%;
         text-align: right;
-        transition: margin-right 0.5s ease; /* Slower transition for smooth animation */
+        transition: margin-right 0.5s ease;
       }
+
       .assignment-name {
         font-weight: bold;
       }
 
       .delete-button {
-        background-color: #dc3545; /* Background color */
-        color: white; /* Text color */
-        border: none; /* Remove default border */
-        border-radius: 5px; /* Rounded corners */
-        padding: 5px 10px; /* Button padding */
-        cursor: pointer; /* Pointer cursor on hover */
-        position: absolute; /* Position the button absolutely */
-        right: -80px; /* Start hidden off the screen */
-        transition: right 0.5s ease, background-color 0.3s, transform 0.1s; /* Slide in effect and hover transition */
+        background-color: var(
+          --delete-button-background-color
+        ); /* Bright red for delete button */
+        color: var(--text-color);
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+        position: absolute;
+        right: -80px;
+        transition: right 0.5s ease, background-color 0.3s, transform 0.1s;
       }
 
       .delete-button:hover {
-        background-color: #c82333; /* Darker shade on hover */
+        background-color: var(
+          --delete-button-background-color__hover
+        ); /* Darker red on hover */
       }
 
       .delete-button:active {
-        transform: scale(0.95); /* Scale down on click */
+        transform: scale(0.95);
       }
 
       .date-item:hover .delete-button {
-        right: 10px; /* Slide into view on hover */
+        right: 10px;
       }
+
       .date-item:hover .assignment {
-        margin-right: 60px; /* Push the assignment text left */
+        margin-right: 60px;
       }
+
       .add-date-form {
-        background-color: #fff;
+        background-color: var(
+          --date-container-background-color
+        ); /* Dark background for form */
         padding: 20px;
         border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         margin-bottom: 20px;
         display: flex;
         justify-content: center;
-        gap: 10px; /* Space between inputs */
+        gap: 10px;
       }
+
       .add-date-form input,
       .add-date-form select {
         padding: 10px;
-        border: 1px solid #ccc;
+        border: 1px solid var(--input-border-color); /* Darker border */
         border-radius: 5px;
-        width: 150px; /* Consistent width */
+        width: 150px;
+        background-color: var(
+          --input-background-color
+        ); /* Dark background for inputs */
+        color: var(--text-color); /* Light text color for inputs */
       }
 
       .addDate {
-        background-color: #007bff; /* Background color */
-        color: white; /* Text color */
-        padding: 10px 15px; /* Button padding */
-        border: none; /* Remove default border */
-        border-radius: 5px; /* Rounded corners */
-        cursor: pointer; /* Pointer cursor on hover */
-        transition: background-color 0.3s, transform 0.1s; /* Transition for background color and scaling */
-      }
-
-      .addDate:hover {
-        background-color: #0056b3; /* Darker shade on hover */
-      }
-
-      .addDate:active {
-        transform: scale(0.95); /* Scale down on click */
-      }
-
-      /* Modal styles */
-      .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1000; /* Sit on top */
-        left: 0;
-        top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
-      }
-      .modal-content {
-        background-color: #fff;
-        margin: 15% auto; /* 15% from the top and centered */
-        padding: 20px;
-        border: 1px solid #888;
-        border-radius: 8px;
-        width: 300px; /* Could be more or less, depending on screen size */
-        text-align: center;
-      }
-
-      h1 {
-        font-size: 1.8em; /* Increase font size for better visibility */
-        margin-bottom: 15px; /* Add space below the title */
-        text-align: center; /* Center the title */
-        color: #007bff; /* Change color for better visibility */
-        padding: 0 10px; /* Add padding for responsiveness */
-      }
-      .modal-button {
-        margin-top: 10px;
-        padding: 10px 15px; /* Increased padding for better clickability */
+        background-color: var(
+          --add-date-button-color
+        ); /* Dark blue for add button */
+        color: var(--button-color);
+        padding: 10px 15px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        background-color: #007bff; /* Change background color for better visibility */
-        color: white;
-        transition: background-color 0.3s; /* Add transition for hover effect */
+        transition: background-color 0.3s, transform 0.1s;
+      }
+
+      .addDate:hover {
+        background-color: var(
+          --add-date-button-color__hover
+        ); /* Darker blue on hover */
+      }
+
+      .addDate:active {
+        transform: scale(0.95);
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.8); /* Darker overlay */
+      }
+
+      .modal-content {
+        background-color: var(
+          --modal-content-background-color
+        ); /* Dark background for modal */
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid var(--input-border-color); /* Darker border */
+        border-radius: 8px;
+        width: 300px;
+        text-align: center;
+        color: var(--text-color); /* Light text color for modal content */
+      }
+
+      .modal-button {
+        margin-top: 10px;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: var(
+          --add-date-button-color
+        ); /* Dark blue for modal buttons */
+        color: var(--button-color);
+        transition: background-color 0.3s;
       }
 
       .modal-button:hover {
-        background-color: #0056b3; /* Darken the button on hover */
+        background-color: var(
+          --add-date-button-color__hover
+        ); /* Darker blue on hover */
       }
 
       .highlight-add {
-        background-color: #ebffba; /* Pastel color for highlighting */
-        transition: background-color 0.5s ease; /* Smooth transition for highlight */
+        background-color: #4dff4d; /* Light green for highlight */
+        transition: background-color 0.5s ease;
       }
 
       .highlight-remove {
-        background-color: #ffbaba; /* Pastel color for highlighting */
-        transition: background-color 0.5s ease; /* Smooth transition for highlight */
+        background-color: #ff4d4d; /* Light red for highlight */
+        transition: background-color 0.5s ease;
       }
 
       .course-title.ITPP {
-        color: #486a8b; /* Blue */
+        color: #66b2ff; /* Light blue */
       }
 
       .course-title.NWEG {
-        color: #67ce67; /* Green */
+        color: #83ff83; /* Light green */
       }
 
       .course-title.PROG {
-        color: #927fff; /* Yellow */
+        color: #b3b3ff; /* Light purple */
       }
 
       .course-title.PRSE {
-        color: #ff818e; /* Red */
+        color: #ff9999; /* Light red */
       }
 
       @media (max-width: 600px) {
@@ -209,70 +272,56 @@
           text-align: center;
         }
         .add-date-form {
-          flex-direction: column; /* Stack inputs on mobile */
+          flex-direction: column;
           align-items: center;
         }
-
         .delete-button {
-          right: -80px; /* Start hidden off the screen */
+          right: -80px;
           bottom: 20px;
-          transition: right 0.5s ease, background-color 0.3s, transform 0.1s; /* Slide in effect and hover transition */
+          transition: right 0.5s ease, background-color 0.3s, transform 0.1s;
         }
-
         .delete-button:hover {
-          background-color: #c82333; /* Darker shade on hover */
+          background-color: var(--delete-button-background-color__hover);
         }
-
         .delete-button:active {
-          transform: scale(0.95); /* Scale down on click */
+          transform: scale(0.95);
         }
-
         .add-date-form {
-          background-color: #fff;
-          padding: 15px; /* Adjusted padding for better spacing */
+          background-color: var(--date-container-background-color);
+          padding: 15px;
           border-radius: 8px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
           margin-bottom: 20px;
           display: flex;
-          flex-direction: column; /* Stack inputs vertically */
-          gap: 10px; /* Space between inputs */
-          align-items: center; /* Center items */
+          flex-direction: column;
+          gap: 10px;
+          align-items: center;
         }
-
-        h1 {
-          font-size: 1.8em; /* Increase font size for better visibility */
-          margin-bottom: 15px; /* Add space below the title */
-          text-align: center; /* Center the title */
-          color: #007bff; /* Change color for better visibility */
-          padding: 0 10px; /* Add padding for responsiveness */
-        }
-
         .add-date-form select,
         .add-date-form input {
-          padding: 12px; /* Increased padding for better touch targets */
-          border: 1px solid #ccc;
+          padding: 12px;
+          border: 1px solid var(--input-border-color);
           border-radius: 5px;
-          width: 100%; /* Full width for inputs */
-          max-width: 300px; /* Limit max width for larger screens */
-          box-sizing: border-box; /* Include padding and border in width */
+          width: 100%;
+          max-width: 300px;
+          box-sizing: border-box;
+          background-color: var(--input-background-color);
+          color: var(--text-color);
         }
-
         .addDate {
-          width: 100%; /* Full width for the button */
-          max-width: 300px; /* Limit max width for the button */
-          padding: 12px; /* Increased padding for better touch targets */
-          font-size: 16px; /* Larger font size for better readability */
-        }
-
-        .date-container * {
-          text-align: center;
+          width: 100%;
+          max-width: 300px;
         }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>Important Dates</h1>
+      <div class="header-container">
+        <ion-icon name="radio-button-on" class="scheme"></ion-icon>
+        <h1>Important Dates</h1>
+      </div>
+
       <div class="add-date-form">
         <select id="course" required>
           <option value="" disabled selected>Select Course</option>
@@ -498,6 +547,63 @@
           renderDates(); // Render the loaded dates
         }
       };
+
+      // CSS Variables for Dark Mode
+      const darkModeCssVariables = [
+        { name: "--text-color", value: "#e0e0e0" },
+        { name: "--page-background-color", value: "#1e1e1e" },
+        { name: "--header-color", value: "#66b2ff" },
+        { name: "--add-date-button-color", value: "#0056b3" },
+        { name: "--add-date-button-color__hover", value: "#004494" },
+        { name: "--date-container-background-color", value: "#2c2c2c" },
+        { name: "--task-background-color", value: "#3a3a3a" },
+        { name: "--delete-button-background-color", value: "#ff4d4d" },
+        { name: "--delete-button-background-color__hover", value: "#e60000" },
+        { name: "--input-background-color", value: "#333" },
+        { name: "--input-border-color", value: "#555" },
+        { name: "--button-color", value: "#e0e0e0" },
+        { name: "--modal-content-background-color", value: "#2c2c2c" },
+      ];
+
+      // CSS Variables for Light Mode
+      const lightModeCssVariables = [
+        { name: "--text-color", value: "#333333" },
+        { name: "--page-background-color", value: "#f9f9f9" },
+        { name: "--header-color", value: "#66b2ff" },
+        { name: "--add-date-button-color", value: "#0056b3" },
+        { name: "--add-date-button-color__hover", value: "#004494" },
+        { name: "--date-container-background-color", value: "#ffffff" },
+        { name: "--task-background-color", value: "#f2f2f2" },
+        { name: "--delete-button-background-color", value: "#ff6666" },
+        { name: "--delete-button-background-color__hover", value: "#e60000" },
+        { name: "--input-background-color", value: "#ffffff" },
+        { name: "--input-border-color", value: "#cccccc" },
+        { name: "--button-color", value: "#e0e0e0" },
+        { name: "--modal-content-background-color", value: "#e0e0e0" },
+      ];
+
+      // Function to apply CSS variables
+      function applyCssVariables(variables) {
+        variables.forEach(({ name, value }) => {
+          document.documentElement.style.setProperty(name, value);
+        });
+      }
+
+      applyCssVariables(darkModeCssVariables);
+
+      const changeTheme = document.querySelector(".scheme");
+      let theme = false;
+
+      changeTheme.addEventListener("click", () => {
+        if (theme == false) {
+          theme = true;
+          applyCssVariables(lightModeCssVariables);
+        } else {
+          theme = false;
+          applyCssVariables(darkModeCssVariables);
+        }
+      });
     </script>
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
   </body>
 </html>
