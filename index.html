@@ -369,24 +369,44 @@
         ITPP: {
           "Assignment 1": "2024-09-19",
           "Assignment 2": "2024-10-22",
+          ICE: "TBC",
+          "Written Exam": "2024-11-18",
+          "Supplementary Exam": "2024-12-13",
+          "Dean's Exam": "TBC",
         },
         NWEG: {
           "Part 1": "2024-08-29",
           "Part 2": "2024-10-16",
+          ICE: "TBC",
+          "Portfolio of Evidence": "2024-11-22",
+          "Portfolio of Evidence Resubmission": "2024-12-12",
+          "Dean's Resubmission": "TBC",
         },
         PROG: {
           "Practical Assignment": "2024-09-03",
           "Written Test": "2024-09-30",
+          "Deferred Test": "2024-10-14",
+          ICE: "TBC",
+          "Written Exam": "2024-11-12",
+          "Supplementary Exam": "2024-12-04",
+          "Dean's Exam": "TBC",
         },
         PRSE: {
           "Assignment 1": "2024-09-09",
           "Assignment 2": "2024-10-10",
+          ICE: "TBC",
+          "Written Exam": "2024-11-05",
+          "Supplementary Exam": "2024-11-26",
+          "Dean's Exam": "TBC",
         },
       };
 
       var itemToDelete = null; // Variable to hold the item to delete
 
       function formatDate(dateStr) {
+        if (dateStr === "TBC") {
+          return "TBC";
+        }
         const date = new Date(dateStr);
         const options = { year: "numeric", month: "long", day: "numeric" };
         return date.toLocaleDateString("en-US", options);
@@ -407,9 +427,17 @@
           }
         }
 
-        allDates.sort((a, b) => new Date(a.date) - new Date(b.date));
+        // Separate TBC dates and actual dates
+        var tbcDates = allDates.filter((item) => item.date === "TBC");
+        var actualDates = allDates.filter((item) => item.date !== "TBC");
 
-        allDates.forEach((item) => {
+        // Sort actual dates
+        actualDates.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        // Merge sorted actual dates with TBC dates at the end
+        var sortedDates = actualDates.concat(tbcDates);
+
+        sortedDates.forEach((item) => {
           var dateItem = document.createElement("div");
           dateItem.className = "date-item";
 
